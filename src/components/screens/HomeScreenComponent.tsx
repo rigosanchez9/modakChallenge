@@ -1,34 +1,27 @@
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, {PropsWithChildren} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import type {RootState} from '../../app/store';
-import {useSelector, useDispatch} from 'react-redux';
-import {increment} from '../../features/counter/counterSlice';
-import artworkData from '../../artworkData';
+// import type {RootState} from '../../app/store';
+// import {useSelector, useDispatch} from 'react-redux';
 import ArtworkItem from '../commons/ArtworkItem';
+import {useGetArtworksQuery} from '../../api/artworkApi';
 
 const HomeScreenComponent: React.FC<PropsWithChildren> = () => {
-  const {
-    counter: {value: count},
-  } = useSelector((state: RootState) => state);
+  // const {
+  //   counter: {value: count},
+  // } = useSelector((state: RootState) => state);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const {data} = artworkData;
+  const {data: {data: artworkData} = {}} = useGetArtworksQuery();
 
   return (
     <View style={styles.screen}>
       <ScrollView style={styles.scrollView}>
-        {data.map(artwork => (
-          <ArtworkItem key={artwork.id} data={artwork} />
-        ))}
+        {artworkData &&
+          artworkData.map((artwork: any) => (
+            <ArtworkItem key={artwork.id} data={artwork} />
+          ))}
       </ScrollView>
-      {/* <Button
-        title={count.toString()}
-        onPress={() => {
-          dispatch(increment());
-        }}
-      /> */}
     </View>
   );
 };

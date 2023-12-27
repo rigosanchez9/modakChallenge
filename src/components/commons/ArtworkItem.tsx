@@ -1,8 +1,11 @@
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import {Image, Pressable, StyleSheet, Text} from 'react-native';
 
 type ArtworkProps = {
   data: {
+    id: number;
     title: string;
     image_id: string;
     artist_display: string;
@@ -15,24 +18,21 @@ type ArtworkProps = {
 };
 
 const ArtworkItem: React.FC<ArtworkProps> = data => {
-  //   const {
-  //     counter: {value: count},
-  //   } = useSelector((state: RootState) => state);
-
   const {
     data: {
       title,
       image_id,
       artist_display,
       thumbnail: {width, height},
+      id,
     },
   } = data;
-  console.log(data);
-
-  //   const dispatch = useDispatch();
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   return (
-    <Pressable onPress={() => console.log('aaa')} style={styles.artworkItem}>
+    <Pressable
+      onPress={() => navigation.navigate('Detail', {artworkId: id})}
+      style={styles.artworkItem}>
       <Text style={styles.itemText}>{title}</Text>
       <Image
         style={{...styles.image, width, height}}
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     resizeMode: 'contain',
+    marginHorizontal: 5,
   },
 });
 
